@@ -1,7 +1,6 @@
 .post {
-  padding: 15px;
-  background-color: lighten($c-blue, 40%);
   display: flex;
+  margin-bottom: 15px;
 
   &__score {
     order: 0;

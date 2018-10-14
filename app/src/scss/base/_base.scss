@@ -31,12 +31,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 34px;
+  font-size: 28px;
+  line-height: 34px;
   margin-bottom: 15px;
 }
 
 h2 {
-  font-size: 24px;
+  font-size: 22px;
 }
 
 h3 {
@@ -63,5 +64,6 @@ h5 {
 
   main {
     padding: 15px 30px;
+    max-width: 1200px;
   }
 }

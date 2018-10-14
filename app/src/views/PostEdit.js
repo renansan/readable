@@ -5,6 +5,7 @@ class PostEdit extends Component {
   render() {
     return (
       <div className="post-edit">
+        <h1 className="page__title">Add New Post</h1>
         <PostForm />
       </div>
     );

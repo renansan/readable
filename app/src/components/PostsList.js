@@ -16,7 +16,7 @@ class PostsList extends Component {
           </select>
         </header>
         <div className="posts__list">
-          <article className="post">
+          <article className="post posts__item">
             <div className="post__info">
               <h2 className="post__title"><Link to="/post/post-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt repellendus, vel suscipit consequatur nesciunt qui a placeat quod aspernatur harum quisquam pariatur asperiores at, veniam, natus fuga officia. Veritatis, consequuntur.</Link></h2>
               <PostMeta />

@@ -3,6 +3,7 @@
   border-radius: 3px;
   border: 1px solid $c-blue;
   color: #fff;
+  cursor: pointer;
   display: inline-block;
   line-height: 18px;
   padding: 5px 15px;
@@ -18,5 +19,51 @@
     outline: 1px dashed #fff;
     outline-offset: -4px;
     transition: none;
+  }
+
+  &--danger {}
+
+  &--success {}
+
+  &--warning {}
+
+  &--ghost {
+    background-color: transparent;
+    color: $c-blue;
+
+    &:hover {
+      background-color: $c-blue;
+      color: #fff;
+    }
+
+    &.is-danger {
+      color: $c-danger;
+      border-color: $c-danger;
+
+      &:hover {
+        background-color: $c-danger;
+        color: #fff;
+      }
+    }
+
+    &.is-success {
+      color: $c-success;
+      border-color: $c-success;
+
+      &:hover {
+        background-color: $c-success;
+        color: #fff;
+      }
+    }
+
+    &.is-warning {
+      color: $c-warning;
+      border-color: $c-warning;
+
+      &:hover {
+        background-color: $c-warning;
+        color: #fff;
+      }
+    }
   }
 }
