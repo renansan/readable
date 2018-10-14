@@ -1,0 +1,22 @@
+.button {
+  background-color: $c-blue;
+  border-radius: 3px;
+  border: 1px solid $c-blue;
+  color: #fff;
+  display: inline-block;
+  line-height: 18px;
+  padding: 5px 15px;
+  text-decoration: none;
+  transition: .3s;
+
+  &:hover {
+    color: #fff;
+    background-color: darken($c-blue, 12%);
+  }
+
+  &:focus {
+    outline: 1px dashed #fff;
+    outline-offset: -4px;
+    transition: none;
+  }
+}

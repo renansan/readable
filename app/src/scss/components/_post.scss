@@ -1,0 +1,78 @@
+.post {
+  padding: 15px;
+  background-color: lighten($c-blue, 40%);
+  display: flex;
+
+  &__score {
+    order: 0;
+  }
+
+  &__info {
+    padding-left: 15px;
+    order: 1;
+  }
+
+  &__title {
+    margin-bottom: 0;
+
+    a {
+      display: block;
+      font-size: 18px;
+      height: 48px;
+      line-height: 24px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &__meta {
+    color: $c-gray-dark;
+    padding: 10px 0;
+    font-size: 12px;
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+
+    span {
+      display: inline-block;
+    }
+  }
+
+  &__categories {
+    margin-right: auto;
+  }
+
+  &__category {
+    margin-right: 5px;
+    display: inline-block;
+    background-color: $c-blue-light;
+    color: #fff;
+    padding: 3px 5px;
+    border-radius: 3px;
+    text-decoration: none;
+
+    &:hover {
+      color: #fff;
+      background-color: darken($c-blue-light, 10%);
+      text-decoration: underline;
+    }
+  }
+
+  &__author {
+    &:after {
+      content: '\2022';
+      display: inline-block;
+      padding: 0 5px;
+    }
+  }
+
+  &__date {
+    &:after {
+      content: '\2022';
+      display: inline-block;
+      padding: 0 5px;
+    }
+  }
+
+  &__comments {}
+}

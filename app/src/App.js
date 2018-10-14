@@ -5,24 +5,33 @@ import Category from './views/Category'
 import PostSingle from './views/PostSingle'
 import PostEdit from './views/PostEdit'
 import PageNotFound from './views/PageNotFound'
-import * as ReadableAPI from './api/ReadableAPI'
-import './App.css';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+// import * as ReadableAPI from './api/ReadableAPI'
+import './scss/app.scss';
+
+library.add(faChevronUp, faChevronDown);
 
 class App extends Component {
   render() {
     return (
       <div className="readable">
         <header className="header">
-          <h1><Link to="/">Readable</Link></h1>
+          <div className="header__logo">
+            <Link to="/">Readable</Link>
+          </div>
 
-          <Link to="/post/new" className="button">Add Post</Link>
+          <div className="header__section">
+            <Link to="/post/new" className="button">Add Post</Link>
+          </div>
 
-          <nav>
-            Categories
-            <ul>
-              <li><Link to="/category/cat-1">Category 1</Link></li>
-              <li><Link to="/category/cat-2">Category 2</Link></li>
-              <li><Link to="/category/cat-3">Category 3</Link></li>
+          <nav className="header-nav header__section">
+            <h2 className="header-nav__title">Categories</h2>
+            <ul className="header-nav__list">
+              <li  className="header-nav__item"><Link  className="header-nav__link" to="/category/cat-1">Category 1</Link></li>
+              <li  className="header-nav__item"><Link  className="header-nav__link" to="/category/cat-2">Category 2</Link></li>
+              <li  className="header-nav__item"><Link  className="header-nav__link" to="/category/cat-3">Category 3</Link></li>
             </ul>
           </nav>
 
@@ -37,8 +46,8 @@ class App extends Component {
             <Route component={PageNotFound} />
           </Switch>
         </main>
-        <footer>
-          <p>Renan San - 2018.</p>
+        <footer className="footer">
+          <p className="footer__credits">Renan San - 2018</p>
         </footer>
       </div>
     );

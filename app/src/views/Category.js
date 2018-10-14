@@ -5,7 +5,7 @@ class Category extends Component {
   render() {
     return (
       <div className="category">
-        <h1 className="category__title">Category 1</h1>
+        <h1 className="page__title">Category 1</h1>
         <PostsList />
       </div>
     );

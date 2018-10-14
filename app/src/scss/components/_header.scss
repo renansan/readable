@@ -1,0 +1,67 @@
+.header {
+  background: $c-gray-light;
+  padding: 15px;
+
+  @include media(">=tablet") {
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 240px;
+  }
+
+  @include media(">=desktop") {
+    width: 300px;
+  }
+
+  &__section {
+    padding: 15px 0;
+  }
+
+  &__logo {
+    margin-bottom: 15px;
+
+    a {
+      border: {
+        bottom: 1px solid transparent;
+        left: 1px solid lighten($c-blue, 20%);
+        right: 1px solid transparent;
+        top: 1px solid lighten($c-blue, 20%);
+      }
+      border-radius: 3px;
+      display: inline-block;
+      font-family: "Roboto Slab", "Times New Roman", serif;
+      font-size: 28px;
+      line-height: 1;
+      padding: 5px 10px;
+      text-decoration: none;
+      transition: .3s;
+
+      &:hover {
+        border: {
+          bottom: 1px solid lighten($c-blue, 20%);
+          right: 1px solid lighten($c-blue, 20%);
+        }
+      }
+    }
+  }
+
+  &-nav {
+    &__title {
+      margin-bottom: 10px;
+    }
+
+    &__list {}
+
+    &__item {}
+
+    &__link {
+      padding: 5px 10px;
+      display: block;
+
+      &:hover {
+        background-color: darken($c-gray-light, 5%);
+      }
+    }
+  }
+}

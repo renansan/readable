@@ -1,0 +1,21 @@
+// Media Query config
+// For _include-media.scss file in helpers
+$breakpoints: (
+  "phone":   576px,
+  "tablet":  768px,
+  "desktop": 992px,
+  "wide":    1200px,
+  "larger":  1440px
+) !default;
+
+// Colors
+$c-blue-light: #71c2cc;
+$c-blue: #5699d2;
+$c-blue-dark: #1d3f72;
+
+$c-gray-light: #fafafa;
+$c-gray: #dedede;
+$c-gray-dark: #999;
+$c-gray-darker: #444;
+
+$c-black: #222;

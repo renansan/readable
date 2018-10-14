@@ -18,7 +18,7 @@ class PostsList extends Component {
         <div className="posts__list">
           <article className="post">
             <div className="post__info">
-              <h2 className="post__title"><Link to="/post/post-1">Post 1</Link></h2>
+              <h2 className="post__title"><Link to="/post/post-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt repellendus, vel suscipit consequatur nesciunt qui a placeat quod aspernatur harum quisquam pariatur asperiores at, veniam, natus fuga officia. Veritatis, consequuntur.</Link></h2>
               <PostMeta />
             </div>
             <div className="post__score">
