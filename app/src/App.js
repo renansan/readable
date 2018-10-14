@@ -1,25 +1,31 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { Switch, Route } from 'react-router-dom'
+import Home from './views/Home'
+import Category from './views/Category'
+import PostDetails from './views/PostDetails'
+import PostEdit from './views/PostEdit'
+import PageNotFound from './views/PageNotFound'
 import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+      <div className="readable">
+        <header className="header">
+          <h1>Readable</h1>
         </header>
+        <main>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/category/:category" component={Category} />
+            <Route path="/post/:post" component={PostDetails} />
+            <Route path="/post/edit/:post" component={PostEdit} />
+            <Route component={PageNotFound} />
+          </Switch>
+        </main>
+        <footer>
+          <p>Made by Renan San - 2018.</p>
+        </footer>
       </div>
     );
   }
