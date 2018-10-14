@@ -5,6 +5,7 @@ import Category from './views/Category'
 import PostSingle from './views/PostSingle'
 import PostEdit from './views/PostEdit'
 import PageNotFound from './views/PageNotFound'
+import * as ReadableAPI from './api/ReadableAPI'
 import './App.css';
 
 class App extends Component {
@@ -13,7 +14,7 @@ class App extends Component {
       <div className="readable">
         <header className="header">
           <h1><Link to="/">Readable</Link></h1>
-          
+
           <Link to="/post/new" className="button">Add Post</Link>
 
           <nav>
