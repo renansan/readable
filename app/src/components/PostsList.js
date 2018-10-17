@@ -4,13 +4,23 @@ import PostMeta from '../components/PostMeta';
 import VoteScore from '../components/VoteScore';
 
 class PostsList extends Component {
+
+  state = {
+    order: 'recents',
+  }
+
+  //handle changes on ShelfSelector
+  handleChange = (event) => {
+    this.setState({ order: event.target.value })
+  }
+
   render() {
     return (
       <section className="posts">
         <header className="posts__header">
           <div className="posts__counter">10 posts</div>
-          <select className="posts__order" name="" id="">
-            <option value="score" selected>Votes</option>
+          <select className="posts__order" value={this.state.order} onChange={this.handleChange}>
+            <option value="score">Votes</option>
             <option value="recents">Recents</option>
             <option value="oldest">Oldest</option>
           </select>
