@@ -15,6 +15,19 @@ class PostsList extends Component {
     this.setState({ order: event.target.value })
   }
 
+  handleSort = order => {
+    switch (order) {
+      case 'recents':
+        return (a, b) => new Date(a.timestamp) > new Date(b.timestamp)
+      case 'oldest':
+        return (a, b) => new Date(a.timestamp) < new Date(b.timestamp)
+      case 'votes':
+        return (a, b) => a.voteScore > b.voteScore
+      default:
+      return (a, b) => new Date(a.timestamp) > new Date(b.timestamp)
+    }
+  }
+
   render() {
     const { posts } = this.props;
     return (
@@ -31,7 +44,7 @@ class PostsList extends Component {
           <span>No posts to show</span>
         ) : (
           <div className="posts__list">
-            {posts.map((post, index) => {
+            {posts.sort(this.handleSort(this.state.order)).map((post, index) => {
               const meta = (({ timestamp, category, author }) => ({ timestamp, category, author }))(post);
               return (
                 <article key={index} className="post posts__item">
