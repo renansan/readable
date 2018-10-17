@@ -6,7 +6,7 @@ import moment from 'moment'
 class PostForm extends Component {
   constructor(props) {
     super(props);
-    this.addPost = props.addPost.bind(this);
+    this.addPost = props.addPost;
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
