@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
-import PostMeta from '../components/PostMeta';
-import VoteScore from '../components/VoteScore';
+import Post from '../components/Post';
 
 class PostsList extends Component {
 
@@ -44,19 +43,9 @@ class PostsList extends Component {
           <span>No posts to show</span>
         ) : (
           <div className="posts__list">
-            {posts.sort(this.handleSort(this.state.order)).map((post, index) => {
-              const meta = (({ timestamp, category, author }) => ({ timestamp, category, author }))(post);
-              return (
-                <article key={index} className="post posts__item">
-                  <div className="post__info">
-                    <h2 className="post__title"><Link to={`/${post.category}/${post.id}`}>{post.title}</Link></h2>
-                    <PostMeta id={post.id} data={meta} />
-                  </div>
-                  <div className="post__score">
-                    <VoteScore />
-                  </div>
-                </article>
-            )})}
+            {posts.sort(this.handleSort(this.state.order)).map((post, index) => (
+              <Post key={index} id={post.id} />
+            ))}
           </div>
         )}
       </section>
