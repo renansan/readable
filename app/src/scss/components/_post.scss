@@ -12,13 +12,18 @@
   }
 
   &__title {
-    margin-bottom: 0;
+    display: block;
 
     a {
-      display: block;
+      font-size: inherit;
+      line-height: inherit;
+    }
+
+    &h2 {
       font-size: 18px;
-      height: 48px;
       line-height: 24px;
+      max-height: 48px;
+      margin-bottom: 0;
       overflow: hidden;
       text-overflow: ellipsis;
     }
