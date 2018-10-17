@@ -28,7 +28,12 @@ class PostsList extends Component {
   }
 
   render() {
-    const { posts } = this.props;
+    let { posts } = this.props;
+    const { category, parentId } = this.props;
+
+    if (category) posts = posts.filter(item => item.category === category);
+    // else if (parentId) posts = posts.filter(item => item.parentId === parentId);
+
     return (
       <section className="posts">
         <header className="posts__header">
