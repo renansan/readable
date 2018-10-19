@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { addPost } from '../actions'
+import {withRouter} from 'react-router-dom';
 import moment from 'moment'
 
 class PostForm extends Component {
@@ -64,7 +65,7 @@ class PostForm extends Component {
         </label>
         <label className="form__submit">
           <button type="submit" className="button form__button">Submit</button>
-          <button type="button" className="button button--ghost is-danger form__button">Cancel</button>
+          <button type="button" onClick={() => this.props.history.goBack()} className="button button--ghost is-danger form__button">Cancel</button>
         </label>
       </form>
     );
@@ -77,4 +78,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(PostForm)
+export default withRouter(connect(null, mapDispatchToProps)(PostForm));
