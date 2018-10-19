@@ -34,18 +34,16 @@ export function deletePost ({ id }) {
   }
 }
 
-export function upvote ({ id, voteScore }) {
+export function upvote (id) {
   return {
     type: UPVOTE,
     id,
-    voteScore,
   }
 }
 
-export function downvote ({ id, voteScore }) {
+export function downvote (id) {
   return {
     type: DOWNVOTE,
     id,
-    voteScore,
   }
 }

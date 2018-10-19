@@ -59,7 +59,6 @@ function posts (state = defaultState.posts, action) {
   const currentVote = state.some(function (item) {
     if (item.id === action.id) return item.voteScore
   });
-  let newVote = null;
 
   switch (action.type) {
     case ADD_POST :
@@ -84,12 +83,10 @@ function posts (state = defaultState.posts, action) {
       return state.filter((item) => item.id !== action.id)
 
     case UPVOTE :
-      newVote = currentVote + 1;
-      return state.map(item => (item.id === action.id) ? { ...item, voteScore: newVote } : item);
+      return state.map(item => (item.id === action.id) ? Object.assign({}, item, { voteScore: item.voteScore + 1 }) : item);
 
     case DOWNVOTE :
-      newVote = currentVote - 1;
-      return state.map(item => (item.id === action.id) ? { ...item, voteScore: newVote } : item);
+      return state.map(item => (item.id === action.id) ? Object.assign({}, item, { voteScore: item.voteScore - 1 }) : item);
 
     default :
       return state

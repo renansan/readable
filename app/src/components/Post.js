@@ -8,7 +8,7 @@ import moment from 'moment'
 class Post extends Component {
 
   render() {
-    const { id, title, body, category, author, timestamp, comments } = this.props.post;
+    const { id, title, body, category, author, timestamp, comments, voteScore } = this.props.post;
     const isSingle = this.props.single;
     return (
       <article className={`post ${(!isSingle) ? 'posts__item' : ''}`}>
@@ -39,7 +39,7 @@ class Post extends Component {
           ) : ''}
         </div>
         <div className="post__score">
-          <VoteScore />
+          <VoteScore id={id} />
         </div>
       </article>
     );
