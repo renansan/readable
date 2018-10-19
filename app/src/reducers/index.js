@@ -17,7 +17,6 @@ const defaultState = {
       body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab nobis tempora magni harum, possimus numquam dicta sequi quod fugiat eligendi consequatur, molestias inventore iste dolore! Officia adipisci earum, reprehenderit pariatur!',
       author: 'Author 3',
       category: 'react',
-      comments: [],
       voteScore: 0
     },
     {
@@ -27,7 +26,6 @@ const defaultState = {
       body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo dolorum asperiores quis similique, perspiciatis neque mollitia quas quibusdam vero corporis magnam voluptatem incidunt tenetur aperiam, commodi magni, a! Sunt, quisquam.',
       author: 'Author 2',
       category: 'redux',
-      comments: [],
       voteScore: 0
     },
     {
@@ -37,7 +35,6 @@ const defaultState = {
       body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus veritatis dicta quis aperiam. Sunt molestiae esse quibusdam sapiente, necessitatibus debitis, quia libero dolorem dicta. Velit quisquam atque blanditiis quas iste.',
       author: 'Author',
       category: 'udacity',
-      comments: [1],
       voteScore: 0
     }
   ],
@@ -45,7 +42,6 @@ const defaultState = {
     {
       id: 1,
       timestamp: '2018-10-18T22:00:00.714Z',
-      title: 'Comment',
       body: 'Message',
       author: 'Author',
       parentId: 'nkp7js6phap',
@@ -93,4 +89,31 @@ function posts (state = defaultState.posts, action) {
   }
 }
 
-export default combineReducers({ posts })
+function comments (state = defaultState.comments, action) {
+  const { id, timestamp, title, body, author, category, comments, voteScore } = action;
+  const currentVote = state.some(function (item) {
+    if (item.id === action.id) return item.voteScore
+  });
+
+  switch (action.type) {
+    case ADD_POST :
+      break
+
+    case EDIT_POST :
+      break
+
+    case DELETE_POST :
+      break
+
+    case UPVOTE :
+      return state.map(item => (item.id === action.id) ? Object.assign({}, item, { voteScore: item.voteScore + 1 }) : item);
+
+    case DOWNVOTE :
+      return state.map(item => (item.id === action.id) ? Object.assign({}, item, { voteScore: item.voteScore - 1 }) : item);
+
+    default :
+      return state
+  }
+}
+
+export default combineReducers({ posts, comments })

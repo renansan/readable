@@ -12,7 +12,8 @@ class PostSingle extends Component {
         <Post id={id} single={true} />
 
         <div className="post__comments">
-          <PostsList parentId={id} />
+          <PostsList type={'comments'} parentId={id} />
+          CommentForm
         </div>
       </section>
     );

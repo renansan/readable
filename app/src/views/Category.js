@@ -9,7 +9,7 @@ class Category extends Component {
     return (
       <div className="category">
         <h1 className="page__title">{category}</h1>
-        <PostsList category={category} />
+        <PostsList type={'posts'} category={category} />
       </div>
     );
   }

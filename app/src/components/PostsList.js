@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import Post from '../components/Post';
 
+/**
+ * PostsList
+ * @extends Component
+ */
 class PostsList extends Component {
 
   state = {
@@ -21,35 +25,39 @@ class PostsList extends Component {
       case 'oldest':
         return (a, b) => new Date(a.timestamp) > new Date(b.timestamp)
       case 'votes':
-        return (a, b) => a.voteScore > b.voteScore
+        return (a, b) => a.voteScore < b.voteScore;
       default:
-      return (a, b) => new Date(a.timestamp) > new Date(b.timestamp)
+      return (a, b) => new Date(a.timestamp) < new Date(b.timestamp)
     }
   }
 
   render() {
-    let { posts } = this.props;
-    const { category, parentId } = this.props;
+    let postsLists = this.props.posts;
+    let postType = 'posts';
+    const { posts, comments, category, parentId } = this.props;
 
-    if (category) posts = posts.filter(item => item.category === category);
-    // else if (parentId) posts = posts.filter(item => item.parentId === parentId);
+    if (category) postsLists = postsLists.filter(item => item.category === category);
+    else if (parentId) {
+      postType = 'comments';
+      postsLists = comments.filter(item => item.parentId === parentId);
+    }
 
     return (
       <section className="posts">
         <header className="posts__header">
-          <div className="posts__counter">{posts.length} posts</div>
+          <div className="posts__counter">{postsLists.length} posts</div>
           <select className="posts__order" value={this.state.order} onChange={this.handleChange}>
-            <option value="score">Votes</option>
+            <option value="votes">Votes</option>
             <option value="recents">Recents</option>
             <option value="oldest">Oldest</option>
           </select>
         </header>
-        {!posts.length ? (
+        {!postsLists.length ? (
           <span>No posts to show</span>
         ) : (
           <div className="posts__list">
-            {posts.sort(this.handleSort(this.state.order)).map((post, index) => (
-              <Post key={index} id={post.id} />
+            {postsLists.sort(this.handleSort(this.state.order)).map((post, index) => (
+              <Post key={index} id={post.id} type={postType} />
             ))}
           </div>
         )}
@@ -58,7 +66,8 @@ class PostsList extends Component {
   }
 }
 
-const mapStateToProps = ({ posts }) => {
+const mapStateToProps = ({ posts, comments }, { parentId }) => {
+  if (parentId) return { comments }
   return { posts }
 };
 
