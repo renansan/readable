@@ -17,9 +17,9 @@ class PostsList extends Component {
   handleSort = order => {
     switch (order) {
       case 'recents':
-        return (a, b) => new Date(a.timestamp) > new Date(b.timestamp)
-      case 'oldest':
         return (a, b) => new Date(a.timestamp) < new Date(b.timestamp)
+      case 'oldest':
+        return (a, b) => new Date(a.timestamp) > new Date(b.timestamp)
       case 'votes':
         return (a, b) => a.voteScore > b.voteScore
       default:

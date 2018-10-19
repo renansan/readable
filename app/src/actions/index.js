@@ -4,7 +4,7 @@ export const DELETE_POST = 'DELETE_POST'
 export const UPVOTE = 'UPVOTE'
 export const DOWNVOTE = 'DOWNVOTE'
 
-export function addPost ({ id, timestamp, title, body, author, category, voteScore }) {
+export function addPost ({ id, timestamp, title, body, author, category, comments, voteScore }) {
   return {
     type: ADD_POST,
     id,
@@ -13,6 +13,7 @@ export function addPost ({ id, timestamp, title, body, author, category, voteSco
     body,
     author,
     category,
+    comments,
     voteScore,
   }
 }

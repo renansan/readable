@@ -11,7 +11,26 @@ import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 // import * as ReadableAPI from './api/ReadableAPI'
 import './scss/app.scss';
 
+// ReadableAPI.getCategories().then((cat) => {
+//   debugger;
+// });
+
 library.add(faChevronUp, faChevronDown);
+
+const categories = [
+  {
+    name: 'React',
+    path: 'react',
+  },
+  {
+    name: 'Redux',
+    path: 'redux',
+  },
+  {
+    name: 'Udacity',
+    path: 'udacity',
+  },
+]
 
 class App extends Component {
   render() {
@@ -29,9 +48,9 @@ class App extends Component {
           <nav className="header-nav header__section">
             <h2 className="header-nav__title">Categories</h2>
             <ul className="header-nav__list">
-              <li  className="header-nav__item"><Link  className="header-nav__link" to="/category/cat-1">Category 1</Link></li>
-              <li  className="header-nav__item"><Link  className="header-nav__link" to="/category/cat-2">Category 2</Link></li>
-              <li  className="header-nav__item"><Link  className="header-nav__link" to="/category/cat-3">Category 3</Link></li>
+              {categories.length ? categories.map((cat, index) => (
+                <li key={index} className="header-nav__item"><Link  className="header-nav__link" to={`/category/${cat.path}`}>{cat.name}</Link></li>
+              )) : ''}
             </ul>
           </nav>
 
