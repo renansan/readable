@@ -63,23 +63,18 @@
     }
   }
 
-  &__author {
-    &:after {
-      content: '\2022';
-      display: inline-block;
-      padding: 0 5px;
-    }
-  }
+  &__author {}
 
-  &__date {
-    &:after {
-      content: '\2022';
-      display: inline-block;
-      padding: 0 5px;
-    }
-  }
-
+  &__date,
   &__comments {
+    &:before {
+      content: '\2022';
+      display: inline-block;
+      padding: 0 5px;
+    }
+  }
+
+  &-comments {
     .post__info {
       display: flex;
       flex-direction: column;
