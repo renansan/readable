@@ -47,6 +47,20 @@ const defaultState = {
       parentId: 'nkp7js6phap',
       voteScore: 0
     }
+  ],
+  categories: [
+    {
+      name: 'React',
+      path: 'react',
+    },
+    {
+      name: 'Redux',
+      path: 'redux',
+    },
+    {
+      name: 'Udacity',
+      path: 'udacity',
+    },
   ]
 }
 
@@ -116,4 +130,8 @@ function comments (state = defaultState.comments, action) {
   }
 }
 
-export default combineReducers({ posts, comments })
+function categories (state = defaultState.categories, action) {
+  return state
+}
+
+export default combineReducers({ posts, comments, categories })

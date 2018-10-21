@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 import Home from './views/Home'
 import Category from './views/Category'
 import PostSingle from './views/PostSingle'
@@ -17,23 +18,9 @@ import './scss/app.scss';
 
 library.add(faChevronUp, faChevronDown);
 
-const categories = [
-  {
-    name: 'React',
-    path: 'react',
-  },
-  {
-    name: 'Redux',
-    path: 'redux',
-  },
-  {
-    name: 'Udacity',
-    path: 'udacity',
-  },
-]
-
 class App extends Component {
   render() {
+    const categories = this.props.categories;
     return (
       <div className="readable">
         <header className="header">
@@ -73,4 +60,10 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = ({ categories }) => {
+  return {
+    categories
+  }
+};
+
+export default connect(mapStateToProps)(App);
