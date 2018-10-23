@@ -32,20 +32,15 @@ class PostsList extends Component {
   }
 
   render() {
-    let postsLists = this.props.posts;
-    let postType = 'posts';
-    const { posts, comments, category, parentId } = this.props;
+    const { posts, category, postType } = this.props;
+    let postsLists = posts;
 
     if (category) postsLists = postsLists.filter(item => item.category === category);
-    else if (parentId) {
-      postType = 'comments';
-      postsLists = comments.filter(item => item.parentId === parentId);
-    }
 
     return (
       <section className="posts">
         <header className="posts__header">
-          <div className="posts__counter">{postsLists.length} posts</div>
+          <div className="posts__counter">{`${postsLists.length} ${postType}${postsLists.length !== 1  ? 's' : ''}`}</div>
           <select className="posts__order" value={this.state.order} onChange={this.handleChange}>
             <option value="votes">Votes</option>
             <option value="recents">Recents</option>
@@ -53,7 +48,7 @@ class PostsList extends Component {
           </select>
         </header>
         {!postsLists.length ? (
-          <span>No posts to show</span>
+          <span>{/*No {`${postType}s`} to show*/}</span>
         ) : (
           <div className="posts__list">
             {postsLists.sort(this.handleSort(this.state.order)).map((post, index) => (
@@ -66,9 +61,10 @@ class PostsList extends Component {
   }
 }
 
-const mapStateToProps = ({ posts, comments }, { parentId }) => {
-  if (parentId) return { comments }
-  return { posts }
+const mapStateToProps = ({ posts }, { parentId }) => {
+  const filteredPosts = posts.filter(item => item.parentId === (parentId || ''))
+  const postType = (parentId) ? 'comment' : 'post';
+  return { posts: filteredPosts, postType }
 };
 
 export default connect(mapStateToProps)(PostsList);

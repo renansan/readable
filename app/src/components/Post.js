@@ -18,7 +18,7 @@ class Post extends Component {
   }
 
   render() {
-    const { id, title, body, category, author, timestamp, voteScore, parentId } = this.props.post;
+    const { id, title, body, category, author, timestamp, voteScore, parentId, postType } = this.props.post;
     const postComments = this.props.postComments;
     const isSingle = this.props.single;
     const isPost = !(parentId || []).length;
@@ -32,8 +32,11 @@ class Post extends Component {
           ) : (
             <h2 className="post__title"><Link to={link}>{title}</Link></h2>
           )}
+          {isSingle || !isPost ? (
+            <div className="post__content">{body}</div>
+          ) : ''}
           <div className="post__meta">
-            {(category || []).length ? (
+            {postType === 'post' && (category || []).length ? (
               <span className="post__categories">
                 <Link to={`/category/${category}`} className="post__category">{category}</Link>
               </span>
@@ -50,9 +53,6 @@ class Post extends Component {
               <span className="post__comments">{postComments.length} comments</span>
             )}
           </div>
-          {isSingle || !isPost ? (
-            <div className="post__content">{body}</div>
-          ) : ''}
         </div>
         <div className="post__score">
           <div className="score">
@@ -78,10 +78,9 @@ class Post extends Component {
   }
 }
 
-const mapStateToProps = ({ posts, comments }, { id, type }) => {
-  const postType = (type === 'comments') ? comments : posts;
-  const post = postType.filter(item => item.id === id)[0];
-  const postComments = comments.filter(item => item.parentId === id);
+const mapStateToProps = ({ posts }, { id, postType }) => {
+  const post = posts.filter(item => item.id === id)[0];
+  const postComments = posts.filter(item => item.parentId === id);
   return { post, postComments }
 };
 

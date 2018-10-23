@@ -6,7 +6,7 @@ class PostEdit extends Component {
     return (
       <div className="post-edit">
         <h1 className="page__title">Add New Post</h1>
-        <PostForm />
+        <PostForm postType='posts' />
       </div>
     );
   }

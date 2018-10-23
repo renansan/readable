@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import PostsList from '../components/PostsList';
+import { connect } from 'react-redux'
 
 class Category extends Component {
   render() {
-    const { pathname } = this.props.location;
-    const category = pathname.substr(pathname.lastIndexOf('/') + 1);
+    const category = this.props.category;
 
     return (
       <div className="category">
-        <h1 className="page__title">{category}</h1>
-        <PostsList type={'posts'} category={category} />
+        <h1 className="page__title">{category.name}</h1>
+        <PostsList category={category.path} />
       </div>
     );
   }
 }
 
-export default Category;
+const mapStateToProps = ({ categories }, { location }) => {
+  const path = location.pathname.substr(location.pathname.lastIndexOf('/') + 1);
+  const category = categories.filter(item => item.path === path)[0];
+  return { category }
+};
+
+export default connect(mapStateToProps)(Category);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Post from '../components/Post';
 import PostsList from '../components/PostsList';
+import PostForm from '../components/PostForm';
 
 class PostSingle extends Component {
   render() {
@@ -12,8 +13,11 @@ class PostSingle extends Component {
         <Post id={id} single={true} />
 
         <div className="post-comments">
-          <PostsList type={'comments'} parentId={id} />
-          CommentForm
+          <PostsList parentId={id} />
+          <div className="post-comments__form">
+            <h2>Add new Comment</h2>
+            <PostForm postType='comments' parentId={id} />
+          </div>
         </div>
       </section>
     );

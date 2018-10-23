@@ -8,7 +8,7 @@ import {
   DOWNVOTE,
 } from '../actions'
 
-const defaultState = {
+const initialState = {
   posts: [
     {
       id: 'nkp7js6phap',
@@ -17,7 +17,9 @@ const defaultState = {
       body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab nobis tempora magni harum, possimus numquam dicta sequi quod fugiat eligendi consequatur, molestias inventore iste dolore! Officia adipisci earum, reprehenderit pariatur!',
       author: 'Author 3',
       category: 'react',
-      voteScore: 0
+      voteScore: 0,
+      parentId: '',
+      postType: 'post',
     },
     {
       id: 'd9y0jr0scef',
@@ -26,7 +28,9 @@ const defaultState = {
       body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo dolorum asperiores quis similique, perspiciatis neque mollitia quas quibusdam vero corporis magnam voluptatem incidunt tenetur aperiam, commodi magni, a! Sunt, quisquam.',
       author: 'Author 2',
       category: 'redux',
-      voteScore: 0
+      voteScore: 0,
+      parentId: '',
+      postType: 'post',
     },
     {
       id: 'q9etvq1yn4q',
@@ -35,14 +39,27 @@ const defaultState = {
       body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus veritatis dicta quis aperiam. Sunt molestiae esse quibusdam sapiente, necessitatibus debitis, quia libero dolorem dicta. Velit quisquam atque blanditiis quas iste.',
       author: 'Author',
       category: 'udacity',
-      voteScore: 0
+      voteScore: 0,
+      parentId: '',
+      postType: 'post',
+    },
+    {
+      id: 1,
+      timestamp: '2018-10-18T22:00:00.714Z',
+      title: '',
+      body: 'Message comentário certo',
+      author: 'Author',
+      category: '',
+      voteScore: 0,
+      parentId: 'nkp7js6phap',
+      postType: 'comment',
     }
   ],
   comments: [
     {
       id: 1,
       timestamp: '2018-10-18T22:00:00.714Z',
-      body: 'Message',
+      body: 'Message Comentário errado',
       author: 'Author',
       parentId: 'nkp7js6phap',
       voteScore: 0
@@ -64,8 +81,8 @@ const defaultState = {
   ]
 }
 
-function posts (state = defaultState.posts, action) {
-  const { id, timestamp, title, body, author, category, comments, voteScore } = action;
+function posts (state = initialState.posts, action) {
+  const { id, timestamp, title, body, author, category, voteScore, parentId, postType } = action;
   const currentVote = state.some(function (item) {
     if (item.id === action.id) return item.voteScore
   });
@@ -80,8 +97,9 @@ function posts (state = defaultState.posts, action) {
           body,
           author,
           category,
-          comments,
           voteScore,
+          parentId,
+          postType,
         },
         ...state,
       ]
@@ -103,7 +121,7 @@ function posts (state = defaultState.posts, action) {
   }
 }
 
-function comments (state = defaultState.comments, action) {
+function comments (state = initialState.comments, action) {
   const { id, timestamp, title, body, author, category, comments, voteScore } = action;
   const currentVote = state.some(function (item) {
     if (item.id === action.id) return item.voteScore
@@ -130,8 +148,8 @@ function comments (state = defaultState.comments, action) {
   }
 }
 
-function categories (state = defaultState.categories, action) {
+function categories (state = initialState.categories, action) {
   return state
 }
 
-export default combineReducers({ posts, comments, categories })
+export default combineReducers({ posts, categories })
