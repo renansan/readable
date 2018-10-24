@@ -18,7 +18,7 @@ const headers = {
 export const getCategories = () =>
   fetch(`${api}/categories`, { headers })
     .then(res => res.json())
-    .then(data => data)
+    .then(data => data.categories)
 
 export const getPosts = (category) =>
   fetch(`${api}/${category}/posts`, { headers })
@@ -46,7 +46,7 @@ export const addPost = (post) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ post })
+    body: JSON.stringify(post)
   }).then(res => res.json())
 
 /**
@@ -71,26 +71,26 @@ export const editPost = (postId, details) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ details })
+    body: JSON.stringify(details)
   }).then(res => res.json())
 
 /**
  * Edit Score
  * @param {String} postId
- * @param {String} voteOption  A vote option ("upVote"/"downVote")
+ * @param {String} option  A vote option ("upVote"/"downVote")
  */
-export const editPostScore = (postId, voteOption) =>
+export const editPostScore = (postId, option) =>
   fetch(`${api}/posts/${postId}`, {
     method: 'POST',
     headers: {
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ voteOption })
+    body: JSON.stringify({ option })
   }).then(res => res.json())
 
 /**
-* Get Comments
+* Get Post Comments
 * @param {String} postId  The post ID
 */
 export const getPostComments = (postId) =>
@@ -118,7 +118,7 @@ export const addComment = (comment) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ comment })
+    body: JSON.stringify(comment)
   }).then(res => res.json())
 
 /**
@@ -143,7 +143,7 @@ export const editComment = (commentId, details) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ details })
+    body: JSON.stringify(details)
   }).then(res => res.json())
 
 /**
@@ -158,5 +158,5 @@ export const editCommentScore = (commentId, voteOption) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ voteOption })
+    body: JSON.stringify(voteOption)
   }).then(res => res.json())

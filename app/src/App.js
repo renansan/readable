@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { receivePosts, receiveCategories } from './actions'
 import Home from './views/Home'
 import Category from './views/Category'
 import PostSingle from './views/PostSingle'
@@ -9,16 +10,51 @@ import PageNotFound from './views/PageNotFound'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
-// import * as ReadableAPI from './api/ReadableAPI'
+import * as ReadableAPI from './api/ReadableAPI'
 import './scss/app.scss';
 
-// ReadableAPI.getCategories().then((cat) => {
-//   debugger;
-// });
+window.ReadableAPI = ReadableAPI;
 
 library.add(faChevronUp, faChevronDown);
 
+class apiTest extends Component {
+  render() {
+    ReadableAPI.getPosts('react').then((posts) => {
+      debugger;
+    });
+    // ReadableAPI.editPost("8xf0y6ziyjabvozdd253nd", { title: 'novo title' }).then((posts) => {
+    //   debugger;
+    // });
+    // ReadableAPI.deletePost('1').then((data) => {
+    //   debugger;
+    // });
+    // ReadableAPI.addPost({
+    //   id: '1',
+    //   timestamp: 1467166872634,
+    //   title: 'Title Blá',
+    //   body: 'Body',
+    //   category: 'react',
+    //   author: 'Renan',
+    //   voteScore: 0,
+    // }).then((data) => {
+    //   debugger;
+    //   ReadableAPI.getAllPosts().then((posts) => {
+    //     debugger;
+    //   });
+    // });
+    return (
+      <div></div>
+    )
+  }
+}
+
 class App extends Component {
+
+  componentDidMount() {
+    this.props.getCategories();
+    this.props.getAllPosts();
+  }
+
   render() {
     const categories = this.props.categories;
     return (
@@ -49,6 +85,7 @@ class App extends Component {
             <Route path="/post/new" component={PostEdit} />
             <Route path="/post/edit/:post" component={PostEdit} />
             <Route path="/:category/:post" component={PostSingle} />
+            <Route path="/api" component={apiTest} />
             <Route component={PageNotFound} />
           </Switch>
         </main>
@@ -66,4 +103,17 @@ const mapStateToProps = ({ categories }) => {
   }
 };
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = dispatch => {
+  return {
+    getCategories: (callback = function(){}) => ReadableAPI.getCategories().then(response => {
+      dispatch(receiveCategories(response))
+      callback(response);
+    }),
+    getAllPosts: (callback = function(){}) => ReadableAPI.getAllPosts().then(response => {
+      dispatch(receivePosts(response))
+      callback(response);
+    }),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

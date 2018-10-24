@@ -6,6 +6,8 @@ class Category extends Component {
   render() {
     const category = this.props.category;
 
+    if (!category) return null;
+
     return (
       <div className="category">
         <h1 className="page__title">{category.name}</h1>

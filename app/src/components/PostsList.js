@@ -2,12 +2,17 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import Post from '../components/Post';
+import * as ReadableAPI from '../api/ReadableAPI'
 
 /**
  * PostsList
  * @extends Component
  */
 class PostsList extends Component {
+  constructor(props) {
+    super(props);
+    this.postType = this.props.postType || 'post';
+  }
 
   state = {
     order: 'recents',
@@ -32,15 +37,17 @@ class PostsList extends Component {
   }
 
   render() {
-    const { posts, category, postType } = this.props;
-    let postsLists = posts;
+    const { posts, category } = this.props;
+    let postsLists = posts || [];
 
     if (category) postsLists = postsLists.filter(item => item.category === category);
+
+    if (!postsLists) return null;
 
     return (
       <section className="posts">
         <header className="posts__header">
-          <div className="posts__counter">{`${postsLists.length} ${postType}${postsLists.length !== 1  ? 's' : ''}`}</div>
+          <div className="posts__counter">{`${postsLists.length} ${this.postType}${postsLists.length !== 1  ? 's' : ''}`}</div>
           <select className="posts__order" value={this.state.order} onChange={this.handleChange}>
             <option value="votes">Votes</option>
             <option value="recents">Recents</option>
@@ -48,11 +55,11 @@ class PostsList extends Component {
           </select>
         </header>
         {!postsLists.length ? (
-          <span>{/*No {`${postType}s`} to show*/}</span>
+          <span>{/*No {`${this.postType}s`} to show*/}</span>
         ) : (
           <div className="posts__list">
             {postsLists.sort(this.handleSort(this.state.order)).map((post, index) => (
-              <Post key={index} id={post.id} type={postType} />
+              <Post key={index} id={post.id} postType={this.postType} />
             ))}
           </div>
         )}
@@ -61,10 +68,12 @@ class PostsList extends Component {
   }
 }
 
-const mapStateToProps = ({ posts }, { parentId }) => {
-  const filteredPosts = posts.filter(item => item.parentId === (parentId || ''))
-  const postType = (parentId) ? 'comment' : 'post';
-  return { posts: filteredPosts, postType }
+const mapStateToProps = ({ posts, comments }, { parentId }) => {
+  let postsList = (parentId) ? comments : posts;
+  let filteredPosts = postsList.filter(item => item.parentId === parentId);
+  return { posts: filteredPosts }
 };
+
+const mapDispatchToProps = dispatch => { return {}}
 
 export default connect(mapStateToProps)(PostsList);

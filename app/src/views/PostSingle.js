@@ -13,10 +13,10 @@ class PostSingle extends Component {
         <Post id={id} single={true} />
 
         <div className="post-comments">
-          <PostsList parentId={id} />
+          <PostsList postType='comment' parentId={id} />
           <div className="post-comments__form">
             <h2>Add new Comment</h2>
-            <PostForm postType='comments' parentId={id} />
+            <PostForm postType='comment' parentId={id} />
           </div>
         </div>
       </section>

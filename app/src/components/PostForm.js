@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { addPost } from '../actions'
 import {withRouter} from 'react-router-dom';
 import moment from 'moment'
+import * as ReadableAPI from '../api/ReadableAPI'
 
 class PostForm extends Component {
   constructor(props) {
@@ -27,8 +28,10 @@ class PostForm extends Component {
   handleSubmit = event => {
     event.preventDefault();
     const { title, author, category, message } = this.state;
+    const { postType, history } = this.props;
     const id = Math.random().toString(36).substr(2, 16);
     const timestamp = moment();
+    debugger;
     this.addPost({
       id,
       timestamp,
@@ -39,25 +42,29 @@ class PostForm extends Component {
       voteScore: 0,
       postType: this.props.postType,
       parentId: this.props.parentId || '',
+    }, function (response) {
+      if (postType === 'post') {
+        history.push(`/${category}/${id}`);
+      }
     })
-
-    if (this.props.postType) {
-      debugger;
-      this.props.history.push(`/${category}/${id}`);
-    }
   }
 
-  componentDidMount() {
-    this.setState({
-      category: this.props.categories[0].path
-    })
+  static getDerivedStateFromProps(props, state) {
+    const categories = (props.categories);
+    const defaultCategory = (categories.length) ? categories[0].path : '';
+    if (state.category !== defaultCategory) {
+      return {
+        category: defaultCategory
+      }
+    }
+    return null
   }
 
   render() {
     const { postType, categories } = this.props;
     return (
       <form action="#!" className="form post-form" onSubmit={this.handleSubmit}>
-        { postType === 'posts' && (
+        { postType === 'post' && (
           <label className="form__control">
             <span className="form__label">Title</span>
             <input className="form__field" type="text" name="title" onChange={this.handleChange} value={this.state.title} required />
@@ -67,7 +74,7 @@ class PostForm extends Component {
           <span className="form__label">Author</span>
           <input className="form__field" type="text" name="author" onChange={this.handleChange} value={this.state.author} required />
         </label>
-        { postType === 'posts' && (
+        { postType === 'post' && (
           <label className="form__control">
             <span className="form__label">Category</span>
             <select className="form__field" name="category" onChange={this.handleChange} value={this.state.categories} required>
@@ -83,7 +90,7 @@ class PostForm extends Component {
         </label>
         <label className="form__submit">
           <button type="submit" className="button form__button">Submit</button>
-            { postType === 'posts' && (
+            { postType === 'post' && (
               <button type="button" onClick={() => this.props.history.goBack()} className="button button--ghost is-danger form__button">Cancel</button>
             )}
         </label>
@@ -100,9 +107,10 @@ const mapStateToProps = ({ categories }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addPost: data => {
-      return dispatch(addPost(data))
-    }
+    addPost: (data, callback) => ReadableAPI.addPost(data).then(response => {
+      dispatch(addPost(response))
+      callback(response);
+    }),
   }
 }
 

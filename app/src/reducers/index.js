@@ -4,6 +4,8 @@ import {
   ADD_POST,
   EDIT_POST,
   DELETE_POST,
+  RECEIVE_POSTS,
+  RECEIVE_CATEGORIES,
   UPVOTE,
   DOWNVOTE,
 } from '../actions'
@@ -43,17 +45,6 @@ const initialState = {
       parentId: '',
       postType: 'post',
     },
-    {
-      id: 1,
-      timestamp: '2018-10-18T22:00:00.714Z',
-      title: '',
-      body: 'Message comentário certo',
-      author: 'Author',
-      category: '',
-      voteScore: 0,
-      parentId: 'nkp7js6phap',
-      postType: 'comment',
-    }
   ],
   comments: [
     {
@@ -65,29 +56,15 @@ const initialState = {
       voteScore: 0
     }
   ],
-  categories: [
-    {
-      name: 'React',
-      path: 'react',
-    },
-    {
-      name: 'Redux',
-      path: 'redux',
-    },
-    {
-      name: 'Udacity',
-      path: 'udacity',
-    },
-  ]
 }
 
 function posts (state = initialState.posts, action) {
   const { id, timestamp, title, body, author, category, voteScore, parentId, postType } = action;
-  const currentVote = state.some(function (item) {
-    if (item.id === action.id) return item.voteScore
-  });
 
   switch (action.type) {
+    case RECEIVE_POSTS :
+      return action.posts
+
     case ADD_POST :
       return [
         {
@@ -122,20 +99,27 @@ function posts (state = initialState.posts, action) {
 }
 
 function comments (state = initialState.comments, action) {
-  const { id, timestamp, title, body, author, category, comments, voteScore } = action;
-  const currentVote = state.some(function (item) {
-    if (item.id === action.id) return item.voteScore
-  });
+  const { id, timestamp, body, author, parentId, voteScore } = action;
 
   switch (action.type) {
     case ADD_POST :
-      break
+      return [
+        {
+          id,
+          timestamp,
+          body,
+          author,
+          parentId,
+          voteScore,
+        },
+        ...state,
+      ]
 
     case EDIT_POST :
-      break
+      return state.map(item => (item.id === action.id) ? { ...item, timestamp, body } : item);
 
     case DELETE_POST :
-      break
+      return state.filter((item) => item.id !== action.id)
 
     case UPVOTE :
       return state.map(item => (item.id === action.id) ? Object.assign({}, item, { voteScore: item.voteScore + 1 }) : item);
@@ -148,8 +132,14 @@ function comments (state = initialState.comments, action) {
   }
 }
 
-function categories (state = initialState.categories, action) {
-  return state
+function categories (state = [], action) {
+  switch (action.type) {
+    case RECEIVE_CATEGORIES :
+      return action.categories
+
+    default :
+      return state
+  }
 }
 
-export default combineReducers({ posts, categories })
+export default combineReducers({ posts, comments, categories })

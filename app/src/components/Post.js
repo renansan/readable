@@ -5,6 +5,7 @@ import { upvote, downvote } from '../actions'
 // import PostMeta from '../components/PostMeta';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import moment from 'moment'
+import * as ReadableAPI from '../api/ReadableAPI'
 
 /**
  * Post
@@ -15,14 +16,17 @@ class Post extends Component {
     super(props);
     this.upvote = props.upvote;
     this.downvote = props.downvote;
+    this.postType = props.postType || 'post';
   }
 
   render() {
-    const { id, title, body, category, author, timestamp, voteScore, parentId, postType } = this.props.post;
-    const postComments = this.props.postComments;
+    const { id, title, body, category, author, timestamp, voteScore, parentId } = this.props.post || {};
+    const { postComments } = this.props;
     const isSingle = this.props.single;
     const isPost = !(parentId || []).length;
     const link = (category) ? `/${category}/${this.props.id}` : `#${this.props.id}`;
+
+    if (!id) return null
 
     return (
       <article id={id} className={`post ${(!isSingle) ? 'posts__item' : ''}`}>
@@ -36,7 +40,7 @@ class Post extends Component {
             <div className="post__content">{body}</div>
           ) : ''}
           <div className="post__meta">
-            {postType === 'post' && (category || []).length ? (
+            {this.postType === 'post' && category ? (
               <span className="post__categories">
                 <Link to={`/category/${category}`} className="post__category">{category}</Link>
               </span>
@@ -78,16 +82,23 @@ class Post extends Component {
   }
 }
 
-const mapStateToProps = ({ posts }, { id, postType }) => {
-  const post = posts.filter(item => item.id === id)[0];
-  const postComments = posts.filter(item => item.parentId === id);
+const mapStateToProps = ({ posts, comments }, { id, postType }) => {
+  const filteredPosts = (postType === 'comment') ? comments : posts;
+  const post = filteredPosts.filter(item => item.id === id)[0];
+  const postComments = (postType === 'comments') ? comments.filter(item => item.parentId === id) : [];
   return { post, postComments }
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    upvote: (id) => dispatch(upvote(id)),
-    downvote: (id) => dispatch(downvote(id)),
+    upvote: (id, callback = function(){}) => ReadableAPI.editPostScore(id, 'upVote').then(response => {
+      dispatch(upvote(id))
+      callback(response);
+    }),
+    downvote: (id, callback = function(){}) => ReadableAPI.editPostScore(id, 'downVote').then(response => {
+      dispatch(downvote(id))
+      callback(response);
+    }),
   }
 }
 
