@@ -17,8 +17,8 @@ class Category extends Component {
   }
 }
 
-const mapStateToProps = ({ categories }, { location }) => {
-  const path = location.pathname.substr(location.pathname.lastIndexOf('/') + 1);
+const mapStateToProps = ({ categories }, { match }) => {
+  const path = match.params.category;
   const category = categories.filter(item => item.path === path)[0];
   return { category }
 };

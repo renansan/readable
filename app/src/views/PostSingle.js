@@ -5,8 +5,7 @@ import PostForm from '../components/PostForm';
 
 class PostSingle extends Component {
   render() {
-    const { pathname } = this.props.location;
-    const id = pathname.substr(pathname.lastIndexOf('/') + 1);
+    const id = this.props.match.params.post;
 
     return (
       <section className="post-details">

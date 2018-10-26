@@ -21,6 +21,7 @@ class Post extends Component {
 
   render() {
     const { id, title, body, category, author, timestamp, voteScore, parentId } = this.props.post || {};
+    const excerpt = (body && body.length > 140) ? body.substring(0, 140) + '…' : body;
     const { postComments } = this.props;
     const isSingle = this.props.single;
     const isPost = !(parentId || []).length;
@@ -36,9 +37,7 @@ class Post extends Component {
           ) : (
             <h2 className="post__title"><Link to={link}>{title}</Link></h2>
           )}
-          {isSingle || !isPost ? (
-            <div className="post__content">{body}</div>
-          ) : ''}
+          <div className="post__content">{(isSingle) ? body : excerpt}</div>
           <div className="post__meta">
             {this.postType === 'post' && category ? (
               <span className="post__categories">
