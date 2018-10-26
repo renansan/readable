@@ -6,7 +6,6 @@ import PostForm from '../components/PostForm';
 class PostSingle extends Component {
   render() {
     const id = this.props.match.params.post;
-
     return (
       <section className="post-details">
         <Post id={id} single={true} />

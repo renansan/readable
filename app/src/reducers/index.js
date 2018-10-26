@@ -4,10 +4,16 @@ import {
   ADD_POST,
   EDIT_POST,
   DELETE_POST,
-  RECEIVE_POSTS,
-  RECEIVE_CATEGORIES,
-  UPVOTE,
-  DOWNVOTE,
+  FETCH_POSTS,
+  UPVOTE_POST,
+  DOWNVOTE_POST,
+  ADD_COMMENT,
+  EDIT_COMMENT,
+  DELETE_COMMENT,
+  FETCH_COMMENTS,
+  UPVOTE_COMMENT,
+  DOWNVOTE_COMMENT,
+  FETCH_CATEGORIES,
 } from '../actions'
 
 const initialState = {
@@ -59,10 +65,10 @@ const initialState = {
 }
 
 function posts (state = initialState.posts, action) {
-  const { id, timestamp, title, body, author, category, voteScore, parentId, postType } = action;
+  const { id, timestamp, title, body, author, category, voteScore, parentId, commentCount } = action;
 
   switch (action.type) {
-    case RECEIVE_POSTS :
+    case FETCH_POSTS :
       return action.posts
 
     case ADD_POST :
@@ -76,7 +82,7 @@ function posts (state = initialState.posts, action) {
           category,
           voteScore,
           parentId,
-          postType,
+          commentCount,
         },
         ...state,
       ]
@@ -87,10 +93,10 @@ function posts (state = initialState.posts, action) {
     case DELETE_POST :
       return state.filter((item) => item.id !== action.id)
 
-    case UPVOTE :
+    case UPVOTE_POST :
       return state.map(item => (item.id === action.id) ? Object.assign({}, item, { voteScore: item.voteScore + 1 }) : item);
 
-    case DOWNVOTE :
+    case DOWNVOTE_POST :
       return state.map(item => (item.id === action.id) ? Object.assign({}, item, { voteScore: item.voteScore - 1 }) : item);
 
     default :
@@ -98,11 +104,17 @@ function posts (state = initialState.posts, action) {
   }
 }
 
-function comments (state = initialState.comments, action) {
+function comments (state = [], action) {
   const { id, timestamp, body, author, parentId, voteScore } = action;
 
   switch (action.type) {
-    case ADD_POST :
+    case FETCH_COMMENTS :
+      return [
+        ...state,
+        ...action.comments
+      ]
+
+    case ADD_COMMENT :
       return [
         {
           id,
@@ -115,16 +127,16 @@ function comments (state = initialState.comments, action) {
         ...state,
       ]
 
-    case EDIT_POST :
-      return state.map(item => (item.id === action.id) ? { ...item, timestamp, body } : item);
+    case EDIT_COMMENT :
+      return state.map(item => (item.id === action.id) ? { ...item, body } : item);
 
-    case DELETE_POST :
+    case DELETE_COMMENT :
       return state.filter((item) => item.id !== action.id)
 
-    case UPVOTE :
+    case UPVOTE_COMMENT :
       return state.map(item => (item.id === action.id) ? Object.assign({}, item, { voteScore: item.voteScore + 1 }) : item);
 
-    case DOWNVOTE :
+    case DOWNVOTE_COMMENT :
       return state.map(item => (item.id === action.id) ? Object.assign({}, item, { voteScore: item.voteScore - 1 }) : item);
 
     default :
@@ -134,7 +146,7 @@ function comments (state = initialState.comments, action) {
 
 function categories (state = [], action) {
   switch (action.type) {
-    case RECEIVE_CATEGORIES :
+    case FETCH_CATEGORIES :
       return action.categories
 
     default :

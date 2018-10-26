@@ -1,7 +1,17 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
-import { upvote, downvote } from '../actions'
+import {
+  deletePost,
+  editPost,
+  upvotePost,
+  downvotePost,
+  fetchComments,
+  deleteComment,
+  editComment,
+  upvoteComment,
+  downvoteComment,
+ } from '../actions'
 // import PostMeta from '../components/PostMeta';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import moment from 'moment'
@@ -14,30 +24,140 @@ import * as ReadableAPI from '../api/ReadableAPI'
 class Post extends Component {
   constructor(props) {
     super(props);
-    this.upvote = props.upvote;
-    this.downvote = props.downvote;
+    this.upvotePost = props.upvotePost;
+    this.downvotePost = props.downvotePost;
+    this.editPost = props.editPost;
+    this.deletePost = props.deletePost;
+    this.fetchComments = props.fetchComments;
+    this.upvoteComment = props.upvoteComment;
+    this.downvoteComment = props.downvoteComment;
+    this.editComment = props.editComment;
+    this.deleteComment = props.deleteComment;
     this.postType = props.postType || 'post';
+    this.submitPostEdit = this.submitPostEdit.bind(this);
+  }
+
+  state = {
+    title: '',
+    body: '',
+    editPost: false,
+  }
+
+  submitPostEdit = event => {
+    event.preventDefault();
+    const { title, body } = this.state;
+    const { id } = this.props.post;
+    if (this.postType === 'post') {
+      this.editPost(id, {
+        id,
+        title,
+        body,
+      }, () => {
+        this.setState({ title, body });
+        this.closePostEdit();
+      });
+    } else {
+      this.editComment(id, {
+        id,
+        body,
+      }, () => {
+        this.setState({ body });
+        this.closePostEdit();
+      });
+    }
+  }
+
+  deleteCurrentPost = event => {
+    const { id } = this.props.post;
+    if (this.postType === 'post') {
+      this.deletePost(id);
+    } else {
+      this.deleteComment(id);
+    }
+  }
+
+  openPostEdit = () => {
+    this.setState({ editPost: true })
+  }
+
+  closePostEdit = () => {
+    this.setState({ editPost: false })
+  }
+
+  handleChange = event => {
+    let obj = {};
+    obj[event.target.name] = event.target.value;
+    this.setState(obj);
+  }
+
+  componentDidMount() {
+    const { id, title, body } = this.props.post || {};
+    this.setState({ title, body });
   }
 
   render() {
-    const { id, title, body, category, author, timestamp, voteScore, parentId } = this.props.post || {};
+    const { id, commentCount, title, body, category, author, timestamp, voteScore, parentId } = this.props.post || {};
     const excerpt = (body && body.length > 140) ? body.substring(0, 140) + '…' : body;
-    const { postComments } = this.props;
     const isSingle = this.props.single;
     const isPost = !(parentId || []).length;
     const link = (category) ? `/${category}/${this.props.id}` : `#${this.props.id}`;
+    const editPost = this.state.editPost;
 
     if (!id) return null
 
     return (
       <article id={id} className={`post ${(!isSingle) ? 'posts__item' : ''}`}>
         <div className="post__info">
-          {isSingle ? (
-            <h1 className="post__title">{title}</h1>
+          {editPost ? (
+            <form className="form post__form" onSubmit={this.submitPostEdit} noValidate>
+              <div className="form__control">
+                <input
+                  className="form__field"
+                  type="text"
+                  name="title"
+                  onChange={this.handleChange}
+                  value={this.state.title}
+                  required/>
+              </div>
+              <div className="form__control">
+                <textarea
+                  className="form__field"
+                  name="body"
+                  onChange={this.handleChange}
+                  value={this.state.body}
+                  required></textarea>
+              </div>
+              <div className="form__submit">
+                <button type="submit" className="button form__button">Submit</button>
+                <button type="button" onClick={this.closePostEdit} className="button button--ghost is-danger form__button">Cancel</button>
+              </div>
+            </form>
           ) : (
-            <h2 className="post__title"><Link to={link}>{title}</Link></h2>
+            <div className="post__content">
+              {isSingle ? (
+                <h1 className="post__title">{title}</h1>
+              ) : (
+                <h2 className="post__title"><Link to={link}>{title}</Link></h2>
+              )}
+              <div className="post__body">{(isSingle) ? body : excerpt}</div>
+              <div className="post__actions">
+                <button
+                  type="button"
+                  className=""
+                  title="Edit Post"
+                  onClick={this.openPostEdit}>
+                  <FontAwesomeIcon className="icon" icon="edit" />
+                </button>
+                <button
+                  type="button"
+                  className="is-danger"
+                  title="Delete Post"
+                  onClick={this.deleteCurrentPost}>
+                  <FontAwesomeIcon className="icon is-danger" icon="trash-alt" />
+                </button>
+              </div>
+            </div>
           )}
-          <div className="post__content">{(isSingle) ? body : excerpt}</div>
           <div className="post__meta">
             {this.postType === 'post' && category ? (
               <span className="post__categories">
@@ -53,7 +173,7 @@ class Post extends Component {
               </Link>
             </span>
             {(!isSingle && isPost) && (
-              <span className="post__comments">{postComments.length} comments</span>
+              <span className="post__comments">{commentCount} comments</span>
             )}
           </div>
         </div>
@@ -84,18 +204,45 @@ class Post extends Component {
 const mapStateToProps = ({ posts, comments }, { id, postType }) => {
   const filteredPosts = (postType === 'comment') ? comments : posts;
   const post = filteredPosts.filter(item => item.id === id)[0];
-  const postComments = (postType === 'comments') ? comments.filter(item => item.parentId === id) : [];
-  return { post, postComments }
+  return { post }
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    upvote: (id, callback = function(){}) => ReadableAPI.editPostScore(id, 'upVote').then(response => {
-      dispatch(upvote(id))
+    editPost: (id, data, callback = function(){}) => ReadableAPI.editPost(id, data).then(response => {
+      dispatch(editPost(data))
       callback(response);
     }),
-    downvote: (id, callback = function(){}) => ReadableAPI.editPostScore(id, 'downVote').then(response => {
-      dispatch(downvote(id))
+    deletePost: (id, callback = function(){}) => ReadableAPI.deletePost(id).then(response => {
+      dispatch(deletePost({id}))
+      callback(response);
+    }),
+    upvotePost: (id, callback = function(){}) => ReadableAPI.editPostScore(id, 'upVote').then(response => {
+      dispatch(upvotePost(id))
+      callback(response);
+    }),
+    downvotePost: (id, callback = function(){}) => ReadableAPI.editPostScore(id, 'downVote').then(response => {
+      dispatch(downvotePost(id))
+      callback(response);
+    }),
+    fetchComments: (id, callback = function(){}) => ReadableAPI.getPostComments(id).then(response => {
+      dispatch(fetchComments(response));
+      callback(response);
+    }),
+    editComment: (id, data, callback = function(){}) => ReadableAPI.editComment(id, data).then(response => {
+      dispatch(editComment(data))
+      callback(response);
+    }),
+    deleteComment: (id, callback = function(){}) => ReadableAPI.deleteComment(id).then(response => {
+      dispatch(deleteComment({id}))
+      callback(response);
+    }),
+    upvoteComment: (id, callback = function(){}) => ReadableAPI.editCommentScore(id, 'upVote').then(response => {
+      dispatch(upvoteComment(id))
+      callback(response);
+    }),
+    downvoteComment: (id, callback = function(){}) => ReadableAPI.editCommentScore(id, 'downVote').then(response => {
+      dispatch(downvoteComment(id))
       callback(response);
     }),
   }

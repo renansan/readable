@@ -1,19 +1,68 @@
 .post {
   display: flex;
   margin-bottom: 15px;
+  position: relative;
+
+  &:hover {
+
+    .post__actions {
+      opacity: 1;
+      right: 5px;
+    }
+  }
 
   &__score {
     order: 0;
   }
 
   &__info {
-    padding-left: 15px;
     order: 1;
+    padding-left: 15px;
     width: 100%;
   }
 
+  &__actions {
+    opacity: 0;
+    padding: 5px;
+    position: absolute;
+    right: 0;
+    top: 10px;
+    transition: .3s;
+
+    button {
+      background-color: transparent;
+      border: 0;
+      cursor: pointer;
+      display: block;
+      height: 20px;
+      line-height: 20px;
+      margin-bottom: 5px;
+      width: 20px;
+
+      .icon {
+        color: $c-blue;
+        height: 14px;
+        transition: .3s;
+        width: auto;
+
+        &.is-danger {
+          color: $c-danger;
+        }
+      }
+    }
+  }
+
+  &__form {
+    padding: 0;
+  }
+
+  &__content {}
+
   &__title {
     display: block;
+    line-height: 30px;
+    min-height: 30px;
+    padding-right: 20px;
 
     a {
       font-size: inherit;
@@ -30,7 +79,7 @@
     }
   }
 
-  &__content {
+  &__body {
     margin-bottom: 10px;
   }
 

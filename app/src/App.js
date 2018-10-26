@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { receivePosts, receiveCategories } from './actions'
+import { fetchPosts, fetchComments, fetchCategories } from './actions'
 import Home from './views/Home'
 import Category from './views/Category'
 import PostSingle from './views/PostSingle'
@@ -9,13 +9,13 @@ import PostEdit from './views/PostEdit'
 import PageNotFound from './views/PageNotFound'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt, faEdit, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import * as ReadableAPI from './api/ReadableAPI'
 import './scss/app.scss';
 
 window.ReadableAPI = ReadableAPI;
 
-library.add(faChevronUp, faChevronDown);
+library.add(faTrashAlt, faEdit, faChevronUp, faChevronDown);
 
 class apiTest extends Component {
   render() {
@@ -106,11 +106,20 @@ const mapStateToProps = ({ categories }) => {
 const mapDispatchToProps = dispatch => {
   return {
     getCategories: (callback = function(){}) => ReadableAPI.getCategories().then(response => {
-      dispatch(receiveCategories(response))
+      dispatch(fetchCategories(response))
       callback(response);
     }),
     getAllPosts: (callback = function(){}) => ReadableAPI.getAllPosts().then(response => {
-      dispatch(receivePosts(response))
+      dispatch(fetchPosts(response))
+      if (Array.isArray(response) && response.length) {
+        debugger;
+        response.forEach(function (item) {
+          ReadableAPI.getPostComments(item.id).then(comments => {
+            debugger;
+            dispatch(fetchComments(comments));
+          })
+        })
+      }
       callback(response);
     }),
   }

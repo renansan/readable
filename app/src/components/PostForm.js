@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { addPost } from '../actions'
+import { addPost, addComment } from '../actions'
 import {withRouter} from 'react-router-dom';
 import moment from 'moment'
 import * as ReadableAPI from '../api/ReadableAPI'
@@ -31,8 +31,8 @@ class PostForm extends Component {
     const { postType, history } = this.props;
     const id = Math.random().toString(36).substr(2, 16);
     const timestamp = moment();
-    debugger;
-    this.addPost({
+
+    this.addPost(postType, {
       id,
       timestamp,
       title,
@@ -40,7 +40,6 @@ class PostForm extends Component {
       author,
       category,
       voteScore: 0,
-      postType: this.props.postType,
       parentId: this.props.parentId || '',
     }, function (response) {
       if (postType === 'post') {
@@ -107,9 +106,16 @@ const mapStateToProps = ({ categories }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addPost: (data, callback) => ReadableAPI.addPost(data).then(response => {
-      dispatch(addPost(response))
-      callback(response);
+    addPost: ((type, data, callback) => {
+      if (type === 'post') {
+        ReadableAPI.addPost(data).then(response => {
+          dispatch(addPost(response))
+        });
+      } else {
+        ReadableAPI.addComment(data).then(response => {
+          dispatch(addComment(response))
+        });
+      }
     }),
   }
 }
