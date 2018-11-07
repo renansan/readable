@@ -19,11 +19,7 @@ class PostForm extends Component {
     message: '',
   }
 
-  handleChange = event => {
-    let obj = {};
-    obj[event.target.name] = event.target.value;
-    this.setState(obj)
-  }
+  handleChange = event => this.setState({ [event.target.name]: event.target.value })
 
   handleSubmit = event => {
     event.preventDefault();
@@ -49,9 +45,8 @@ class PostForm extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const categories = (props.categories);
-    const defaultCategory = (categories.length) ? categories[0].path : '';
-    if (state.category !== defaultCategory) {
+    const defaultCategory = (props.categories[0] || []).path || '';
+    if (!state.category && state.category !== defaultCategory) {
       return {
         category: defaultCategory
       }
@@ -106,14 +101,16 @@ const mapStateToProps = ({ categories }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addPost: ((type, data, callback) => {
+    addPost: ((type, data, callback = function(){}) => {
       if (type === 'post') {
         ReadableAPI.addPost(data).then(response => {
-          dispatch(addPost(response))
+          dispatch(addPost(response));
+          callback(response);
         });
       } else {
         ReadableAPI.addComment(data).then(response => {
-          dispatch(addComment(response))
+          dispatch(addComment(response));
+          callback(response);
         });
       }
     }),
