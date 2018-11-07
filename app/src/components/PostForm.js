@@ -4,6 +4,7 @@ import { addPost, addComment } from '../actions'
 import {withRouter} from 'react-router-dom';
 import moment from 'moment'
 import * as ReadableAPI from '../api/ReadableAPI'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class PostForm extends Component {
   constructor(props) {
@@ -83,10 +84,13 @@ class PostForm extends Component {
           <textarea className="form__field" name="message" onChange={this.handleChange} value={this.state.message} cols="30" rows="10" required></textarea>
         </label>
         <label className="form__submit">
-          <button type="submit" className="button form__button">Submit</button>
-            { postType === 'post' && (
-              <button type="button" onClick={() => this.props.history.goBack()} className="button button--ghost is-danger form__button">Cancel</button>
-            )}
+          <button type="submit" className="button form__button">
+            <FontAwesomeIcon className="button__icon" icon="paper-plane" />
+            Submit
+          </button>
+          { postType === 'post' && (
+            <button type="button" onClick={() => this.props.history.goBack()} className="button button--ghost is-danger form__button">Cancel</button>
+          )}
         </label>
       </form>
     );

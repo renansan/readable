@@ -9,13 +9,22 @@ import PostEdit from './views/PostEdit'
 import PageNotFound from './views/PageNotFound'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faEdit, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import {
+  faPaperPlane,
+  faPlus,
+  faTimes,
+  faEllipsisV,
+  faTrashAlt,
+  faEdit,
+  faChevronUp,
+  faChevronDown
+} from '@fortawesome/free-solid-svg-icons'
 import * as ReadableAPI from './api/ReadableAPI'
 import './scss/app.scss';
 
 window.ReadableAPI = ReadableAPI;
 
-library.add(faTrashAlt, faEdit, faChevronUp, faChevronDown);
+library.add(faPaperPlane, faPlus, faTimes, faEllipsisV, faTrashAlt, faEdit, faChevronUp, faChevronDown);
 
 class apiTest extends Component {
   render() {
@@ -65,7 +74,10 @@ class App extends Component {
           </div>
 
           <div className="header__section">
-            <Link to="/post/new" className="button">Add Post</Link>
+            <Link to="/post/new" className="button">
+              <FontAwesomeIcon className="button__icon" icon="plus" />
+              Add Post
+            </Link>
           </div>
 
           <nav className="header-nav header__section">

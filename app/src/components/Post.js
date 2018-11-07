@@ -45,6 +45,7 @@ class Post extends Component {
     title: '',
     body: '',
     editPost: false,
+    overflowMenuActive: false,
   }
 
   submitPostEdit = event => {
@@ -80,6 +81,13 @@ class Post extends Component {
     }
   }
 
+  toggleOverflowMenu = (option) => {
+    this.setState((state, props) => {
+      const value = (typeof option === 'boolean') ? option : !state.overflowMenuActive;
+      return { overflowMenuActive: value }
+    })
+  }
+
   openPostEdit = () => {
     this.setState({ editPost: true })
   }
@@ -105,7 +113,7 @@ class Post extends Component {
     const isSingle = this.props.single;
     const isPost = !(parentId || []).length;
     const link = (category) ? `/${category}/${this.props.id}` : `#${this.props.id}`;
-    const editPost = this.state.editPost;
+    const { editPost, overflowMenuActive } = this.state;
 
     if (!id) return null
 
@@ -115,16 +123,20 @@ class Post extends Component {
           {editPost ? (
             <form className="form post__form" onSubmit={this.submitPostEdit} noValidate>
               <div className="form__control">
-                <input
-                  className="form__field"
-                  type="text"
-                  name="title"
-                  onChange={this.handleChange}
-                  value={this.state.title}
-                  required/>
+                {isPost && (
+                  <input
+                    autoFocus
+                    className="form__field"
+                    type="text"
+                    name="title"
+                    onChange={this.handleChange}
+                    value={this.state.title}
+                    required/>
+                )}
               </div>
               <div className="form__control">
                 <textarea
+                  autoFocus={(isPost) ? false : true}
                   className="form__field"
                   name="body"
                   onChange={this.handleChange}
@@ -147,18 +159,33 @@ class Post extends Component {
               <div className="post__actions">
                 <button
                   type="button"
-                  className=""
-                  title="Edit Post"
-                  onClick={this.openPostEdit}>
-                  <FontAwesomeIcon className="icon" icon="edit" />
+                  className="post__actions-button"
+                  onFocus={this.toggleOverflowMenu}
+                  title="Edit Post">
+                  {overflowMenuActive ? (
+                    <FontAwesomeIcon className="icon" icon="times" />
+                  ) : (
+                    <FontAwesomeIcon className="icon" icon="ellipsis-v" />
+                  )}
                 </button>
-                <button
-                  type="button"
-                  className="is-danger"
-                  title="Delete Post"
-                  onClick={this.deleteCurrentPost}>
-                  <FontAwesomeIcon className="icon is-danger" icon="trash-alt" />
-                </button>
+                <div tabIndex={-1} className={`overflow-menu ${(overflowMenuActive) ? 'overflow-menu--active' : ''}`} onClick={e => this.toggleOverflowMenu(false)}>
+                  <button
+                    type="button"
+                    className="overflow-menu__item"
+                    title="Click to edit this post"
+                    onClick={this.openPostEdit}>
+                    <FontAwesomeIcon className="icon" icon="edit" />
+                    Edit Post
+                  </button>
+                  <button
+                    type="button"
+                    className="overflow-menu__item is-danger"
+                    title="Click to delete this post"
+                    onClick={this.deleteCurrentPost}>
+                    <FontAwesomeIcon className="icon is-danger" icon="trash-alt" />
+                    Delete Post
+                  </button>
+                </div>
               </div>
             </div>
           )}
