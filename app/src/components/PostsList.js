@@ -24,17 +24,27 @@ class PostsList extends Component {
   }
 
   handleSort = order => {
-    switch (order) {
-      case 'recents':
-        return (a, b) => new Date(a.timestamp) < new Date(b.timestamp)
-      case 'oldest':
-        return (a, b) => new Date(a.timestamp) > new Date(b.timestamp)
-      case 'votes':
-        return (a, b) => a.voteScore < b.voteScore;
-      default:
-      return (a, b) => new Date(a.timestamp) < new Date(b.timestamp)
+    return (a, b) => {
+      const aTime = new Date(a.timestamp);
+      const bTime = new Date(b.timestamp);
+      const compare = (x, y) => {
+        if (x > y) return -1;
+        else if (x < y) return 1;
+        else return 0;
+      }
+
+      switch (order) {
+        case 'oldest':
+          return compare(bTime, aTime);
+        case 'votes':
+          return compare(a.voteScore, b.voteScore);
+        default: // recents
+          return compare(aTime, bTime);
+      }
     }
   }
+
+
 
   render() {
     const { posts, category } = this.props;
@@ -43,6 +53,8 @@ class PostsList extends Component {
     if (category) postsLists = postsLists.filter(item => item.category === category);
 
     if (!postsLists) return null;
+
+    postsLists = Array.prototype.sort.call(postsLists, this.handleSort(this.state.order));
 
     return (
       <section className="posts">
@@ -58,7 +70,7 @@ class PostsList extends Component {
           <span>{/*No {`${this.postType}s`} to show*/}</span>
         ) : (
           <div className="posts__list">
-            {postsLists.sort(this.handleSort(this.state.order)).map((post, index) => (
+            {postsLists.map((post, index) => (
               <Post key={index} id={post.id} postType={this.postType} />
             ))}
           </div>

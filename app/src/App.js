@@ -112,10 +112,10 @@ const mapDispatchToProps = dispatch => {
     getAllPosts: (callback = function(){}) => ReadableAPI.getAllPosts().then(response => {
       dispatch(fetchPosts(response))
       if (Array.isArray(response) && response.length) {
-        debugger;
+        // debugger;
         response.forEach(function (item) {
           ReadableAPI.getPostComments(item.id).then(comments => {
-            debugger;
+            // debugger;
             dispatch(fetchComments(comments));
           })
         })

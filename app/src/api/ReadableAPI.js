@@ -158,5 +158,5 @@ export const editCommentScore = (commentId, voteOption) =>
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(voteOption)
+    body: JSON.stringify({ option: voteOption })
   }).then(res => res.json())

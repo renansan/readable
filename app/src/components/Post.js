@@ -24,13 +24,17 @@ import * as ReadableAPI from '../api/ReadableAPI'
 class Post extends Component {
   constructor(props) {
     super(props);
-    this.upvotePost = props.upvotePost;
-    this.downvotePost = props.downvotePost;
+    this.upvote = (id, postType) => {
+      if (postType === 'post') props.upvotePost(id);
+      else props.upvoteComment(id);
+    };
+    this.downvote = (id, postType) => {
+      if (postType === 'post') props.downvotePost(id);
+      else props.downvoteComment(id);
+    };
     this.editPost = props.editPost;
     this.deletePost = props.deletePost;
     this.fetchComments = props.fetchComments;
-    this.upvoteComment = props.upvoteComment;
-    this.downvoteComment = props.downvoteComment;
     this.editComment = props.editComment;
     this.deleteComment = props.deleteComment;
     this.postType = props.postType || 'post';
@@ -183,7 +187,7 @@ class Post extends Component {
               type="button"
               className="score__vote-button score__update"
               title="Upvote"
-              onClick={() => this.upvote(id)}>
+              onClick={() => this.upvote(id, this.postType)}>
               <FontAwesomeIcon className="score__icon" icon="chevron-up" />
             </button>
             <span className="score__current">{voteScore}</span>
@@ -191,7 +195,7 @@ class Post extends Component {
               type="button"
               className="score__vote-button score__downdate"
               title="Downvote"
-              onClick={() => this.downvote(id)}>
+              onClick={() => this.downvote(id, this.postType)}>
               <FontAwesomeIcon className="score__icon" icon="chevron-down" />
             </button>
           </div>
