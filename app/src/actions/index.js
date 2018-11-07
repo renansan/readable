@@ -95,10 +95,11 @@ export function editComment ({ id, title, body }) {
   }
 }
 
-export function deleteComment ({ id }) {
+export function deleteComment ({ id, parentId }) {
   return {
     type: DELETE_COMMENT,
     id,
+    parentId,
   }
 }
 

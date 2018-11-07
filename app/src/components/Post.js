@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
 import {
   deletePost,
@@ -73,11 +73,14 @@ class Post extends Component {
   }
 
   deleteCurrentPost = event => {
-    const { id } = this.props.post;
+    const { id, parentId } = this.props.post;
+
     if (this.postType === 'post') {
-      this.deletePost(id);
+      this.deletePost(id, () => {
+        this.props.history.push('/');
+      });
     } else {
-      this.deleteComment(id);
+      this.deleteComment(id, parentId);
     }
   }
 
@@ -89,7 +92,9 @@ class Post extends Component {
   }
 
   openPostEdit = () => {
-    this.setState({ editPost: true })
+    debugger;
+    const { title, body } = this.props.post;
+    this.setState({ title, body, editPost: true })
   }
 
   closePostEdit = () => {
@@ -264,8 +269,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(editComment(data))
       callback(response);
     }),
-    deleteComment: (id, callback = function(){}) => ReadableAPI.deleteComment(id).then(response => {
-      dispatch(deleteComment({id}))
+    deleteComment: (id, parentId, callback = function(){}) => ReadableAPI.deleteComment(id).then(response => {
+      dispatch(deleteComment({id, parentId}))
       callback(response);
     }),
     upvoteComment: (id, callback = function(){}) => ReadableAPI.editCommentScore(id, 'upVote').then(response => {
@@ -279,4 +284,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Post);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Post));
