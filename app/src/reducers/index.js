@@ -99,6 +99,12 @@ function posts (state = initialState.posts, action) {
     case DOWNVOTE_POST :
       return state.map(item => (item.id === action.id) ? Object.assign({}, item, { voteScore: item.voteScore - 1 }) : item);
 
+    case ADD_COMMENT :
+      return state.map(item => (item.id === action.parentId) ? Object.assign({}, item, { commentCount: item.commentCount + 1 }) : item);
+
+    case DELETE_COMMENT :
+      return state.map(item => (item.id === action.parentId) ? Object.assign({}, item, { commentCount: item.commentCount - 1 }) : item);
+
     default :
       return state
   }
