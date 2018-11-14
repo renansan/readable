@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import Post from '../components/Post';
-import * as ReadableAPI from '../api/ReadableAPI'
 
 /**
  * PostsList
@@ -85,7 +83,5 @@ const mapStateToProps = ({ posts, comments }, { parentId }) => {
   let filteredPosts = postsList.filter(item => item.parentId === parentId);
   return { posts: filteredPosts }
 };
-
-const mapDispatchToProps = dispatch => { return {}}
 
 export default connect(mapStateToProps)(PostsList);

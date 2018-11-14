@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route, Link, Redirect } from 'react-router-dom'
+import { Switch, Route, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchPosts, fetchComments, fetchCategories } from './actions'
 import Home from './views/Home'

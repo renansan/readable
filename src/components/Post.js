@@ -92,7 +92,6 @@ class Post extends Component {
   }
 
   openPostEdit = () => {
-    debugger;
     const { title, body } = this.props.post;
     this.setState({ title, body, editPost: true })
   }
@@ -108,7 +107,7 @@ class Post extends Component {
   }
 
   componentDidMount() {
-    const { id, title, body } = this.props.post || {};
+    const { title, body } = this.props.post || {};
     this.setState({ title, body });
   }
 
