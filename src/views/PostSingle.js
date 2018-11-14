@@ -2,23 +2,30 @@ import React, { Component } from 'react';
 import Post from '../components/Post';
 import PostsList from '../components/PostsList';
 import PostForm from '../components/PostForm';
+import PageNotFound from './PageNotFound'
 import { connect } from 'react-redux'
 
 class PostSingle extends Component {
+
   render() {
-    const { id, postExist, history } = this.props;
-    if (!postExist) history.push(`/404`, {customMessage: `The post you requested does not exist or has moved.`});
+    const { id, postExist } = this.props;
     return (
       <section className="post-details">
-        <Post id={id} single={true} />
+        {(postExist === false) ? (
+          <PageNotFound />
+        ) : (postExist === true) ? (
+          <div>
+            <Post id={id} single={true} />
 
-        <div className="post-comments">
-          <PostsList postType='comment' parentId={id} />
-          <div className="post-comments__form">
-            <h2>Add new Comment</h2>
-            <PostForm postType='comment' parentId={id} />
+            <div className="post-comments">
+              <PostsList postType='comment' parentId={id} />
+              <div className="post-comments__form">
+                <h2>Add new Comment</h2>
+                <PostForm postType='comment' parentId={id} />
+              </div>
+            </div>
           </div>
-        </div>
+        ) : ''}
       </section>
     );
   }
@@ -26,11 +33,14 @@ class PostSingle extends Component {
 
 const mapStateToProps = ({ posts }, { match }) => {
   const postId = match.params.post;
-  const postExist = posts.some(post => {
-    if (post.id === postId) return true;
-    return false;
-  })
-  return { postId, postExist }
+  let postExist = null;
+  if (posts.length) {
+    postExist = posts.some(post => {
+      if (post.id === postId) return true;
+      return false;
+    })
+  }
+  return { id: postId, postExist }
 };
 
 export default connect(mapStateToProps)(PostSingle);
