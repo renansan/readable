@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route, Link } from 'react-router-dom'
+import { Switch, Route, Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchPosts, fetchComments, fetchCategories } from './actions'
 import Home from './views/Home'
@@ -25,37 +25,6 @@ import './scss/app.scss';
 window.ReadableAPI = ReadableAPI;
 
 library.add(faPaperPlane, faPlus, faTimes, faEllipsisV, faTrashAlt, faEdit, faChevronUp, faChevronDown);
-
-class apiTest extends Component {
-  render() {
-    ReadableAPI.getPosts('react').then((posts) => {
-      debugger;
-    });
-    // ReadableAPI.editPost("8xf0y6ziyjabvozdd253nd", { title: 'novo title' }).then((posts) => {
-    //   debugger;
-    // });
-    // ReadableAPI.deletePost('1').then((data) => {
-    //   debugger;
-    // });
-    // ReadableAPI.addPost({
-    //   id: '1',
-    //   timestamp: 1467166872634,
-    //   title: 'Title Blá',
-    //   body: 'Body',
-    //   category: 'react',
-    //   author: 'Renan',
-    //   voteScore: 0,
-    // }).then((data) => {
-    //   debugger;
-    //   ReadableAPI.getAllPosts().then((posts) => {
-    //     debugger;
-    //   });
-    // });
-    return (
-      <div></div>
-    )
-  }
-}
 
 class App extends Component {
 
@@ -95,10 +64,10 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route path="/category/:category" component={Category} />
             <Route path="/post/new" component={PostEdit} />
-            <Route path="/post/edit/:post" component={PostEdit} />
-            <Route path="/:category/:post" component={PostSingle} />
-            <Route path="/api" component={apiTest} />
-            <Route component={PageNotFound} />
+            <Route path="/post/edit/:post/" component={PostEdit} />
+            <Route path="/:category/:post/" component={PostSingle} />
+            <Route path="/404" component={PageNotFound} status={404} />
+            <Redirect to="/404" />
           </Switch>
         </main>
         <footer className="footer">
