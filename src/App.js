@@ -66,8 +66,7 @@ class App extends Component {
             <Route path="/post/new" component={PostEdit} />
             <Route path="/post/edit/:post/" component={PostEdit} />
             <Route path="/:category/:post/" component={PostSingle} />
-            <Route path="/404" component={PageNotFound} status={404} />
-            <Redirect to="/404" />
+            <Route component={PageNotFound} status={404} />
           </Switch>
         </main>
         <footer className="footer">
