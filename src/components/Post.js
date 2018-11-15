@@ -12,10 +12,8 @@ import {
   upvoteComment,
   downvoteComment,
  } from '../actions'
-// import PostMeta from '../components/PostMeta';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import moment from 'moment'
-import * as ReadableAPI from '../api/ReadableAPI'
 
 /**
  * Post
@@ -53,7 +51,7 @@ class Post extends Component {
     const { title, body } = this.state;
     const { id } = this.props.post;
     if (this.postType === 'post') {
-      this.editPost(id, {
+      this.editPost({
         id,
         title,
         body,
@@ -62,7 +60,7 @@ class Post extends Component {
         this.closePostEdit();
       });
     } else {
-      this.editComment(id, {
+      this.editComment({
         id,
         body,
       }, () => {
@@ -80,7 +78,7 @@ class Post extends Component {
         this.props.history.push('/');
       });
     } else {
-      this.deleteComment(id, parentId);
+      this.deleteComment({id, parentId});
     }
   }
 
@@ -165,7 +163,7 @@ class Post extends Component {
                   type="button"
                   className="post__actions-button"
                   onFocus={this.toggleOverflowMenu}
-                  title="Edit Post">
+                  title="Options">
                   {overflowMenuActive ? (
                     <FontAwesomeIcon className="icon" icon="times" />
                   ) : (
@@ -179,7 +177,7 @@ class Post extends Component {
                     title="Click to edit this post"
                     onClick={this.openPostEdit}>
                     <FontAwesomeIcon className="icon" icon="edit" />
-                    Edit Post
+                    Edit {this.postType}
                   </button>
                   <button
                     type="button"
@@ -187,7 +185,7 @@ class Post extends Component {
                     title="Click to delete this post"
                     onClick={this.deleteCurrentPost}>
                     <FontAwesomeIcon className="icon is-danger" icon="trash-alt" />
-                    Delete Post
+                    Delete {this.postType}
                   </button>
                 </div>
               </div>
@@ -196,10 +194,10 @@ class Post extends Component {
           <div className="post__meta">
             {this.postType === 'post' && category ? (
               <span className="post__categories">
-                <Link to={`/category/${category}`} className="post__category">{category}</Link>
+                <Link to={`/${category}`} className="post__category">{category}</Link>
               </span>
             ) : ''}
-            <span className="post__author">Posted by <b>{author}</b></span>
+            <span className="post__author">{`${this.postType}ed`} by <b>{author}</b></span>
             <span className="post__date">
               <Link
                 to={ link }
@@ -244,42 +242,15 @@ const mapStateToProps = ({ posts, comments }, { id, postType }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    editPost: (id, data, callback = function(){}) => ReadableAPI.editPost(id, data).then(response => {
-      dispatch(editPost(data))
-      callback(response);
-    }),
-    deletePost: (id, callback = function(){}) => ReadableAPI.deletePost(id).then(response => {
-      dispatch(deletePost({id}))
-      callback(response);
-    }),
-    upvotePost: (id, callback = function(){}) => ReadableAPI.editPostScore(id, 'upVote').then(response => {
-      dispatch(upvotePost(id))
-      callback(response);
-    }),
-    downvotePost: (id, callback = function(){}) => ReadableAPI.editPostScore(id, 'downVote').then(response => {
-      dispatch(downvotePost(id))
-      callback(response);
-    }),
-    fetchComments: (id, callback = function(){}) => ReadableAPI.getPostComments(id).then(response => {
-      dispatch(fetchComments(response));
-      callback(response);
-    }),
-    editComment: (id, data, callback = function(){}) => ReadableAPI.editComment(id, data).then(response => {
-      dispatch(editComment(data))
-      callback(response);
-    }),
-    deleteComment: (id, parentId, callback = function(){}) => ReadableAPI.deleteComment(id).then(response => {
-      dispatch(deleteComment({id, parentId}))
-      callback(response);
-    }),
-    upvoteComment: (id, callback = function(){}) => ReadableAPI.editCommentScore(id, 'upVote').then(response => {
-      dispatch(upvoteComment(id))
-      callback(response);
-    }),
-    downvoteComment: (id, callback = function(){}) => ReadableAPI.editCommentScore(id, 'downVote').then(response => {
-      dispatch(downvoteComment(id))
-      callback(response);
-    }),
+    editPost: (data, cb) => dispatch(editPost(data, cb)),
+    deletePost: (id, cb) => dispatch(deletePost(id, cb)),
+    upvotePost: (id, cb) => dispatch(upvotePost(id, cb)),
+    downvotePost: (id, cb) => dispatch(downvotePost(id, cb)),
+    fetchComments: (postId, cb) => dispatch(fetchComments(postId, cb)),
+    editComment: (data, cb) => dispatch(editComment(data, cb)),
+    deleteComment: (data, cb) => dispatch(deleteComment(data, cb)),
+    upvoteComment: (id, cb) => dispatch(upvoteComment(id, cb)),
+    downvoteComment: (id, cb) => dispatch(downvoteComment(id, cb)),
   }
 }
 

@@ -42,8 +42,6 @@ class PostsList extends Component {
     }
   }
 
-
-
   render() {
     const { posts, category } = this.props;
     let postsLists = posts || [];
@@ -65,7 +63,7 @@ class PostsList extends Component {
           </select>
         </header>
         {!postsLists.length ? (
-          <span>{/*No {`${this.postType}s`} to show*/}</span>
+          <p>{`No ${this.postType}s to show`}</p>
         ) : (
           <div className="posts__list">
             {postsLists.map((post, index) => (
@@ -80,7 +78,7 @@ class PostsList extends Component {
 
 const mapStateToProps = ({ posts, comments }, { parentId }) => {
   let postsList = (parentId) ? comments : posts;
-  let filteredPosts = postsList.filter(item => item.parentId === parentId);
+  let filteredPosts = parentId ? postsList.filter(item => item.parentId === parentId) : postsList;
   return { posts: filteredPosts }
 };
 

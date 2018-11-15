@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { fetchPosts, fetchComments, fetchCategories } from './actions'
+import { fetchPosts, fetchCategories } from './actions'
 import Home from './views/Home'
 import Category from './views/Category'
 import PostSingle from './views/PostSingle'
@@ -53,7 +53,7 @@ class App extends Component {
             <h2 className="header-nav__title">Categories</h2>
             <ul className="header-nav__list">
               {categories.length ? categories.map((cat, index) => (
-                <li key={index} className="header-nav__item"><Link  className="header-nav__link" to={`/category/${cat.path}`}>{cat.name}</Link></li>
+                <li key={index} className="header-nav__item"><Link  className="header-nav__link" to={`/${cat.path}`}>{cat.name}</Link></li>
               )) : ''}
             </ul>
           </nav>
@@ -62,11 +62,10 @@ class App extends Component {
         <main>
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/category/:category" component={Category} />
             <Route path="/post/new" component={PostEdit} />
-            <Route path="/post/edit/:post/" component={PostEdit} />
+            <Route exact path="/:category" component={Category} />
             <Route path="/:category/:post/" component={PostSingle} />
-            <Route component={PageNotFound} status={404} />
+            <Route path="*" component={PageNotFound} status={404} />
           </Switch>
         </main>
         <footer className="footer">
@@ -85,23 +84,8 @@ const mapStateToProps = ({ categories }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getCategories: (callback = function(){}) => ReadableAPI.getCategories().then(response => {
-      dispatch(fetchCategories(response))
-      callback(response);
-    }),
-    getAllPosts: (callback = function(){}) => ReadableAPI.getAllPosts().then(response => {
-      dispatch(fetchPosts(response))
-      if (Array.isArray(response) && response.length) {
-        // debugger;
-        response.forEach(function (item) {
-          ReadableAPI.getPostComments(item.id).then(comments => {
-            // debugger;
-            dispatch(fetchComments(comments));
-          })
-        })
-      }
-      callback(response);
-    }),
+    getCategories: (cb) => dispatch(fetchCategories(cb)),
+    getAllPosts: (cb) => dispatch(fetchPosts(cb)),
   }
 }
 

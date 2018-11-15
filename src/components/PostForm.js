@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { addPost, addComment } from '../actions'
 import {withRouter} from 'react-router-dom';
 import moment from 'moment'
-import * as ReadableAPI from '../api/ReadableAPI'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class PostForm extends Component {
@@ -36,8 +35,7 @@ class PostForm extends Component {
       body: message,
       author,
       category,
-      voteScore: 0,
-      parentId: this.props.parentId || '',
+      parentId: this.props.parentId || null,
     }, function (response) {
       if (postType === 'post') {
         history.push(`/${category}/${id}`);
@@ -105,17 +103,11 @@ const mapStateToProps = ({ categories }) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addPost: ((type, data, callback = function(){}) => {
+    addPost: ((type, data, cb) => {
       if (type === 'post') {
-        ReadableAPI.addPost(data).then(response => {
-          dispatch(addPost(response));
-          callback(response);
-        });
+        dispatch(addPost(data, cb));
       } else {
-        ReadableAPI.addComment(data).then(response => {
-          dispatch(addComment(response));
-          callback(response);
-        });
+        dispatch(addComment(data, cb));
       }
     }),
   }
