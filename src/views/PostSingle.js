@@ -1,34 +1,37 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Post from '../components/Post';
 import PostsList from '../components/PostsList';
 import PostForm from '../components/PostForm';
-import PageNotFound from './PageNotFound'
+import PageNotFound from './PageNotFound';
 import { connect } from 'react-redux'
 
-class PostSingle extends Component {
+const PostSingle = props => {
 
-  render() {
-    const { id, postExist } = this.props;
+  const { id, postExist } = props;
+
+  if (postExist === false) {
+    return (
+      <PageNotFound />
+    )
+  } else if (postExist === true) {
     return (
       <section className="post-details">
-        {(postExist === false) ? (
-          <PageNotFound />
-        ) : (postExist === true) ? (
-          <div>
-            <Post id={id} single={true} />
+        <Post id={id} single={true} />
 
-            <div className="post-comments">
-              <PostsList postType='comment' parentId={id} />
-              <div className="post-comments__form">
-                <h2>Add new Comment</h2>
-                <PostForm postType='comment' parentId={id} />
-              </div>
-            </div>
+        <div className="post-comments">
+          <PostsList postType='comment' parentId={id} />
+          <div className="post-comments__form">
+            <h2>Add new Comment</h2>
+            <PostForm postType='comment' parentId={id} />
           </div>
-        ) : ''}
+        </div>
       </section>
     );
   }
+
+  return (
+    <span>{/*loading*/}</span>
+  )
 }
 
 const mapStateToProps = ({ posts }, { match }) => {
